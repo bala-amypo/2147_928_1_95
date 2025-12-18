@@ -28,9 +28,7 @@ public Optional<TransactionLog> get(@PathVariable Long id) {
 return service.getOne(id);
 }
 @PutMapping("/transaction/update/{id}")
-public String update(@PathVariable Long id, @RequestBody TransactionLog
-3
-t) {
+public String update(@PathVariable Long id, @RequestBody TransactionLog t) {
 if(service.getOne(id).isPresent()) {
 t.setId(id);
 service.insert(t);
