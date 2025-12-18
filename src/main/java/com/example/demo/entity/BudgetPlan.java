@@ -1,11 +1,17 @@
 package com.example.demo.entity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+@Entity
 public class BudgetPlan {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 private Long userId;
 private Integer month;
 private Integer year;
 private Double incomeTarget;
 private Double expenseLimit;
+
 public Long getId() { 
     return id; 
 }

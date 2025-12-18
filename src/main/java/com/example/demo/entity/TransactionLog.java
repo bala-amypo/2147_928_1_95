@@ -1,6 +1,11 @@
 package com.example.demo.entity;
 import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+@Entity
 public class TransactionLog {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 private Long userId;
 private String category;
