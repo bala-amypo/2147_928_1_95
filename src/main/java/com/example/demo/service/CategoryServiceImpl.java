@@ -1,29 +1,29 @@
 package com.example.demo.service;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import com.example.demo.entity.Category;
+import com.example.demo.repository.CategoryRepository;
+import com.example.demo.service.CategoryService;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
-Map<Long, Category> data = new HashMap<>();
-@Override
-public Category insert(Category c) {
-data.put(c.getId(), c);
-return c;
-}
-@Override
-public List<Category> getAll() {
-return new ArrayList<>(data.values());
-}
-@Override
-public Optional<Category> getOne(Long id) {
-return Optional.ofNullable(data.get(id));
-}
-@Override
-public void delete(Long id) {
-data.remove(id);
-}
+
+    private final CategoryRepository categoryRepository;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+
+    @Override
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    @Override
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
 }

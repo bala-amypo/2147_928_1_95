@@ -3,7 +3,9 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(
+    uniqueConstraints = @UniqueConstraint(columnNames = "name")
+)
 public class Category {
 
     @Id
@@ -13,13 +15,18 @@ public class Category {
     private String name;
     private String type;
 
-    public Category() {}
+    /* ---------- Constructors ---------- */
+
+    public Category() {
+    }
 
     public Category(Long id, String name, String type) {
         this.id = id;
         this.name = name;
         this.type = type;
     }
+
+    /* ---------- Getters & Setters ---------- */
 
     public Long getId() {
         return id;
@@ -44,5 +51,4 @@ public class Category {
     public void setType(String type) {
         this.type = type;
     }
-    
 }
