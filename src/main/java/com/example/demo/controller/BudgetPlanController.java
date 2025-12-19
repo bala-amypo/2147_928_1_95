@@ -14,19 +14,12 @@ public class BudgetPlanController {
     }
 
     @PostMapping("/{userId}")
-    public BudgetPlan createPlan(
-            @PathVariable Long userId,
-            @RequestBody BudgetPlan plan) {
-
+    public BudgetPlan createPlan( @PathVariable Long userId, @RequestBody BudgetPlan plan) {
         return budgetPlanService.createBudgetPlan(userId, plan);
     }
 
     @GetMapping("/{userId}/{month}/{year}")
-    public BudgetPlan getPlan(
-            @PathVariable Long userId,
-            @PathVariable Integer month,
-            @PathVariable Integer year) {
-
+    public BudgetPlan getPlan( @PathVariable Long userId, @PathVariable Integer month, @PathVariable Integer year) {
         return budgetPlanService.getBudgetPlan(userId, month, year);
     }
 }

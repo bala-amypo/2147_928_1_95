@@ -14,16 +14,11 @@ public class BudgetSummaryController {
     }
 
     @PostMapping("/{budgetPlanId}")
-    public BudgetSummary generateSummary(
-            @PathVariable Long budgetPlanId) {
-
+    public BudgetSummary generateSummary( @PathVariable Long budgetPlanId) {
         return budgetSummaryService.generateSummary(budgetPlanId);
     }
-
     @GetMapping("/{budgetPlanId}")
-    public BudgetSummary getSummary(
-            @PathVariable Long budgetPlanId) {
-
+    public BudgetSummary getSummary(@PathVariable Long budgetPlanId) {
         return budgetSummaryService.getSummary(budgetPlanId);
     }
 }
