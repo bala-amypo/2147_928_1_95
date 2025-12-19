@@ -19,8 +19,7 @@ public class BudgetSummary {
     private LocalDateTime generatedAt;
     public BudgetSummary() {
     }
-    public BudgetSummary(
-            Long id,
+    public BudgetSummary(Long id,
             BudgetPlan budgetPlan,
             Double totalIncome,
             Double totalExpense,
