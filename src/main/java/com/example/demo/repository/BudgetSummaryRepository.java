@@ -1,14 +1,15 @@
 package com.example.demo.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.entity.BudgetSummary;
 import com.example.demo.entity.BudgetPlan;
+import com.example.demo.entity.BudgetSummary;
 
 @Repository
-public interface BudgetSummaryRepository
-        extends JpaRepository<BudgetSummary, Long> {
+public interface BudgetSummaryRepository extends JpaRepository<BudgetSummary, Long> {
 
-    BudgetSummary findByBudgetPlan(BudgetPlan budgetPlan);
+    Optional<BudgetSummary> findByBudgetPlan(BudgetPlan budgetPlan);
 }
