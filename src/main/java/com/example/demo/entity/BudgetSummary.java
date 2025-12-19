@@ -17,12 +17,8 @@ public class BudgetSummary {
     private Double totalExpense;
     private String status;
     private LocalDateTime generatedAt;
-
-    /* ---------- Constructors ---------- */
-
     public BudgetSummary() {
     }
-
     public BudgetSummary(
             Long id,
             BudgetPlan budgetPlan,

@@ -1,7 +1,5 @@
 package com.example.demo.entity;
-
 import jakarta.persistence.*;
-
 @Entity
 @Table(
     uniqueConstraints = @UniqueConstraint(
@@ -9,28 +7,18 @@ import jakarta.persistence.*;
     )
 )
 public class BudgetPlan {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     private User user;
-
     private Integer month;
     private Integer year;
     private Double incomeTarget;
     private Double expenseLimit;
     public BudgetPlan() {
     }
-    public BudgetPlan(
-            Long id,
-            User user,
-            Integer month,
-            Integer year,
-            Double incomeTarget,
-            Double expenseLimit) {
-
+    public BudgetPlan(Long id,User user,Integer month,Integer year,Double incomeTarget,Double expenseLimit) {
         this.id = id;
         this.user = user;
         this.month = month;

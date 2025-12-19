@@ -15,17 +15,11 @@ public class TransactionLogController {
     }
 
     @PostMapping("/{userId}")
-    public TransactionLog addTransaction(
-            @PathVariable Long userId,
-            @RequestBody TransactionLog log) {
-
+    public TransactionLog addTransaction( @PathVariable Long userId, @RequestBody TransactionLog log) {
         return transactionLogService.addTransaction(userId, log);
     }
-
     @GetMapping("/{userId}")
-    public List<TransactionLog> getUserTransactions(
-            @PathVariable Long userId) {
-
+    public List<TransactionLog> getUserTransactions( @PathVariable Long userId) {
         return transactionLogService.getUserTransactions(userId);
     }
 }
