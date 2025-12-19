@@ -1,29 +1,45 @@
-package com.example.demo.service;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+package com.example.demo.service.impl;
+
 import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.BudgetPlan;
 import com.example.demo.entity.BudgetSummary;
+import com.example.demo.repository.BudgetPlanRepository;
+import com.example.demo.repository.BudgetSummaryRepository;
+import com.example.demo.service.BudgetSummaryService;
+
 @Service
 public class BudgetSummaryServiceImpl implements BudgetSummaryService {
-Map<Long, BudgetSummary> data = new HashMap<>();
-@Override
-public BudgetSummary insert(BudgetSummary s) {
-data.put(s.getId(), s);
-return s;
-}
-@Override
-public List<BudgetSummary> getAll() {
-return new ArrayList<>(data.values());
-}
-@Override
-public Optional<BudgetSummary> getOne(Long id) {
-return Optional.ofNullable(data.get(id));
-}
-@Override
-public void delete(Long id) {
-data.remove(id);
-}
+
+    private final BudgetSummaryRepository budgetSummaryRepository;
+    private final BudgetPlanRepository budgetPlanRepository;
+
+    public BudgetSummaryServiceImpl(
+            BudgetSummaryRepository budgetSummaryRepository,
+            BudgetPlanRepository budgetPlanRepository) {
+
+        this.budgetSummaryRepository = budgetSummaryRepository;
+        this.budgetPlanRepository = budgetPlanRepository;
+    }
+
+    @Override
+    public BudgetSummary generateSummary(Long budgetPlanId) {
+        BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId).orElse(null);
+
+        BudgetSummary summary = new BudgetSummary(
+                null,
+                plan,
+                0.0,
+                0.0,
+                "UNDER_LIMIT"
+        );
+
+        return budgetSummaryRepository.save(summary);
+    }
+
+    @Override
+    public BudgetSummary getSummary(Long budgetPlanId) {
+        BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId).orElse(null);
+        return budgetSummaryRepository.findByBudgetPlan(plan);
+    }
 }

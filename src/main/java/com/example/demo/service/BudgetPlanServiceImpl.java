@@ -1,29 +1,37 @@
-package com.example.demo.service;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+package com.example.demo.service.impl;
+
 import org.springframework.stereotype.Service;
+
 import com.example.demo.entity.BudgetPlan;
+import com.example.demo.entity.User;
+import com.example.demo.repository.BudgetPlanRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.BudgetPlanService;
+
 @Service
 public class BudgetPlanServiceImpl implements BudgetPlanService {
-Map<Long, BudgetPlan> data = new HashMap<>();
-@Override
-public BudgetPlan insert(BudgetPlan b) {
-data.put(b.getId(), b);
-return b;
-}
-@Override
-public List<BudgetPlan> getAll() {
-return new ArrayList<>(data.values());
-}
-@Override
-public Optional<BudgetPlan> getOne(Long id) {
-return Optional.ofNullable(data.get(id));
-}
-@Override
-public void delete(Long id) {
-data.remove(id);
-}
+
+    private final BudgetPlanRepository budgetPlanRepository;
+    private final UserRepository userRepository;
+
+    public BudgetPlanServiceImpl(
+            BudgetPlanRepository budgetPlanRepository,
+            UserRepository userRepository) {
+
+        this.budgetPlanRepository = budgetPlanRepository;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public BudgetPlan createBudgetPlan(Long userId, BudgetPlan plan) {
+        User user = userRepository.findById(userId).orElse(null);
+        plan.setUser(user);
+        return budgetPlanRepository.save(plan);
+    }
+
+    @Override
+    public BudgetPlan getBudgetPlan(Long userId, Integer month, Integer year) {
+        User user = userRepository.findById(userId).orElse(null);
+        return budgetPlanRepository.findByUserAndMonthAndYear(user, month, year);
+    }
 }
