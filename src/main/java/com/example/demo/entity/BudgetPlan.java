@@ -21,12 +21,8 @@ public class BudgetPlan {
     private Integer year;
     private Double incomeTarget;
     private Double expenseLimit;
-
-    /* ---------- Constructors ---------- */
-
     public BudgetPlan() {
     }
-
     public BudgetPlan(
             Long id,
             User user,
@@ -42,9 +38,6 @@ public class BudgetPlan {
         this.incomeTarget = incomeTarget;
         this.expenseLimit = expenseLimit;
     }
-
-    /* ---------- Getters & Setters ---------- */
-
     public Long getId() {
         return id;
     }
