@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Category;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.CategoryRepository;
+import com.example.demo.service.CategoryService;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -19,16 +19,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
-
-        if (categoryRepository.existsByName(category.getName())) {
-            throw new BadRequestException("Category already exists");
-        }
-
-        if (!"INCOME".equals(category.getType()) &&
-            !"EXPENSE".equals(category.getType())) {
-            throw new BadRequestException("Invalid category type");
-        }
-
         return categoryRepository.save(category);
     }
 
