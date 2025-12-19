@@ -1,41 +1,27 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {"user_id", "month", "year"}
+    )
+)
 public class BudgetPlan {
 
-    private int id;
-    private String month;
-    private double limitAmount;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public BudgetPlan() {
-    }
+    @ManyToOne
+    private User user;
 
-    public BudgetPlan(int id, String month, double limitAmount) {
-        this.id = id;
-        this.month = month;
-        this.limitAmount = limitAmount;
-    }
+    private Integer month;
+    private Integer year;
 
-    public int getId() {
-        return id;
-    }
+    private Double incomeTarget;
+    private Double expenseLimit;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public double getLimitAmount() {
-        return limitAmount;
-    }
-
-    public void setLimitAmount(double limitAmount) {
-        this.limitAmount = limitAmount;
-    }
+    public BudgetPlan() {}
 }

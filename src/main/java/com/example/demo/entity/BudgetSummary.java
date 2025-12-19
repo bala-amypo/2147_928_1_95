@@ -1,31 +1,26 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
 public class BudgetSummary {
 
-    private int id;
-    private double totalSpent;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public BudgetSummary() {
-    }
+    @OneToOne
+    private BudgetPlan budgetPlan;
 
-    public BudgetSummary(int id, double totalSpent) {
-        this.id = id;
-        this.totalSpent = totalSpent;
-    }
+    private Double totalIncome;
+    private Double totalExpense;
+    private String status;
 
-    public int getId() {
-        return id;
-    }
+    private LocalDateTime generatedAt;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public double getTotalSpent() {
-        return totalSpent;
-    }
-
-    public void setTotalSpent(double totalSpent) {
-        this.totalSpent = totalSpent;
+    @PrePersist
+    void onCreate() {
+        generatedAt = LocalDateTime.now();
     }
 }

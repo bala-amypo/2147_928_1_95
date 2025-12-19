@@ -1,41 +1,24 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
+@Entity
 public class TransactionLog {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Category category;
+
+    private Double amount;
     private String description;
-    private double amount;
+    private LocalDate transactionDate;
 
-    public TransactionLog() {
-    }
-
-    public TransactionLog(int id, String description, double amount) {
-        this.id = id;
-        this.description = description;
-        this.amount = amount;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
+    public TransactionLog() {}
 }
