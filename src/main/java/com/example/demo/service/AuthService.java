@@ -2,9 +2,9 @@ package com.example.demo.service;
 
 import com.example.demo.entity.User;
 
-public interface UserService {
+public interface AuthService {
 
     User register(User user);
 
-    User findByEmail(String email);
+    User login(String email, String password);
 }
