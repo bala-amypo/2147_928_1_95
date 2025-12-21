@@ -23,12 +23,34 @@ public class BudgetSummaryServiceImpl implements BudgetSummaryService {
     }
 
     @Override
+    public BudgetSummary getSummary(Long budgetPlanId) {
+
+        BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId)
+                .orElseThrow(() -> new RuntimeException("Budget plan not found"));
+
+        BudgetSummary summary = budgetSummaryRepository.findByBudgetPlan(plan);
+
+        // ✅ AUTO-CREATE if missing (prevents 500)
+        if (summary == null) {
+            summary = new BudgetSummary(
+                    null,
+                    plan,
+                    0.0,
+                    0.0,
+                    "UNDER_LIMIT"
+            );
+            summary = budgetSummaryRepository.save(summary);
+        }
+
+        return summary;
+    }
+
+    @Override
     public BudgetSummary generateSummary(Long budgetPlanId) {
 
         BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId)
                 .orElseThrow(() -> new RuntimeException("Budget plan not found"));
 
-        // Avoid duplicate summaries
         BudgetSummary existing = budgetSummaryRepository.findByBudgetPlan(plan);
         if (existing != null) {
             return existing;
@@ -43,20 +65,5 @@ public class BudgetSummaryServiceImpl implements BudgetSummaryService {
         );
 
         return budgetSummaryRepository.save(summary);
-    }
-
-    @Override
-    public BudgetSummary getSummary(Long budgetPlanId) {
-
-        BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId)
-                .orElseThrow(() -> new RuntimeException("Budget plan not found"));
-
-        BudgetSummary summary = budgetSummaryRepository.findByBudgetPlan(plan);
-
-        if (summary == null) {
-            throw new RuntimeException("Budget summary not generated yet");
-        }
-
-        return summary;
     }
 }
