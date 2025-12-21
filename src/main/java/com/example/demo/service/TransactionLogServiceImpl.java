@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.TransactionLog;
 import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.TransactionLogRepository;
 import com.example.demo.repository.UserRepository;
@@ -23,7 +24,6 @@ public class TransactionLogServiceImpl implements TransactionLogService {
             TransactionLogRepository transactionLogRepository,
             UserRepository userRepository,
             CategoryRepository categoryRepository) {
-
         this.transactionLogRepository = transactionLogRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
@@ -32,14 +32,12 @@ public class TransactionLogServiceImpl implements TransactionLogService {
     @Override
     public TransactionLog addTransaction(Long userId, TransactionLog log) {
 
-        // ✅ Attach managed User
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new BadRequestException("User with ID " + userId + " not found"));
 
-        // ✅ Attach managed Category
         Long categoryId = log.getCategory().getId();
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new BadRequestException("Category with ID " + categoryId + " not found"));
 
         log.setUser(user);
         log.setCategory(category);
@@ -50,7 +48,7 @@ public class TransactionLogServiceImpl implements TransactionLogService {
     @Override
     public List<TransactionLog> getUserTransactions(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new BadRequestException("User with ID " + userId + " not found"));
         return transactionLogRepository.findByUser(user);
     }
 }

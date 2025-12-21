@@ -29,7 +29,11 @@ public class BudgetPlanServiceImpl implements BudgetPlanService {
                 .orElseThrow(() -> new BadRequestException("User with ID " + userId + " not found"));
 
         // Check if a plan already exists for this user/month/year
-        if (budgetPlanRepository.findByUserAndMonthAndYear(user, plan.getMonth(), plan.getYear()) != null) {
+        boolean exists = budgetPlanRepository
+                .findByUserAndMonthAndYear(user, plan.getMonth(), plan.getYear())
+                .isPresent();
+
+        if (exists) {
             throw new BadRequestException("Budget plan already exists for user " + userId
                     + " for month " + plan.getMonth() + " and year " + plan.getYear());
         }
@@ -44,11 +48,10 @@ public class BudgetPlanServiceImpl implements BudgetPlanService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BadRequestException("User with ID " + userId + " not found"));
 
-        BudgetPlan plan = budgetPlanRepository.findByUserAndMonthAndYear(user, month, year);
-        if (plan == null) {
-            throw new BadRequestException("Budget plan not found for user " + userId
-                    + " for month " + month + " and year " + year);
-        }
+        BudgetPlan plan = budgetPlanRepository
+                .findByUserAndMonthAndYear(user, month, year)
+                .orElseThrow(() -> new BadRequestException("Budget plan not found for user " + userId
+                        + " for month " + month + " and year " + year));
 
         return plan;
     }

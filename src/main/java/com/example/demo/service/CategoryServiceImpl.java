@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Category;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.repository.CategoryRepository;
 
 @Service
@@ -17,6 +19,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category createCategory(Category category) {
+        if (categoryRepository.existsByName(category.getName())) {
+            throw new BadRequestException("Category with name '" + category.getName() + "' already exists");
+        }
         return categoryRepository.save(category);
     }
 
