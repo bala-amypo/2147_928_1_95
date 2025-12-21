@@ -24,14 +24,23 @@ public class BudgetPlanServiceImpl implements BudgetPlanService {
 
     @Override
     public BudgetPlan createBudgetPlan(Long userId, BudgetPlan plan) {
-        User user = userRepository.findById(userId).orElse(null);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         plan.setUser(user);
         return budgetPlanRepository.save(plan);
     }
 
     @Override
     public BudgetPlan getBudgetPlan(Long userId, Integer month, Integer year) {
-        User user = userRepository.findById(userId).orElse(null);
-        return budgetPlanRepository.findByUserAndMonthAndYear(user, month, year);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return budgetPlanRepository
+                .findByUserAndMonthAndYear(user, month, year)
+                .orElseThrow(() ->
+                        new RuntimeException("Budget plan not found"));
     }
 }
