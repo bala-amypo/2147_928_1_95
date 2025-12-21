@@ -17,53 +17,40 @@ public class BudgetSummaryServiceImpl implements BudgetSummaryService {
     public BudgetSummaryServiceImpl(
             BudgetSummaryRepository budgetSummaryRepository,
             BudgetPlanRepository budgetPlanRepository) {
-
         this.budgetSummaryRepository = budgetSummaryRepository;
         this.budgetPlanRepository = budgetPlanRepository;
     }
 
+    // ✅ SAFE GET (NO 500, NO DUPLICATE ISSUE)
     @Override
     public BudgetSummary getSummary(Long budgetPlanId) {
 
         BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId)
                 .orElseThrow(() -> new RuntimeException("Budget plan not found"));
 
-        BudgetSummary summary = budgetSummaryRepository.findByBudgetPlan(plan);
-
-        // ✅ AUTO-CREATE if missing (prevents 500)
-        if (summary == null) {
-            summary = new BudgetSummary(
-                    null,
-                    plan,
-                    0.0,
-                    0.0,
-                    "UNDER_LIMIT"
-            );
-            summary = budgetSummaryRepository.save(summary);
-        }
-
-        return summary;
+        return budgetSummaryRepository
+                .findFirstByBudgetPlanOrderByGeneratedAtDesc(plan)
+                .orElseThrow(() -> new RuntimeException("Budget summary not generated yet"));
     }
 
+    // ✅ SAFE GENERATE (NO DUPLICATES)
     @Override
     public BudgetSummary generateSummary(Long budgetPlanId) {
 
         BudgetPlan plan = budgetPlanRepository.findById(budgetPlanId)
                 .orElseThrow(() -> new RuntimeException("Budget plan not found"));
 
-        BudgetSummary existing = budgetSummaryRepository.findByBudgetPlan(plan);
-        if (existing != null) {
-            return existing;
-        }
-
-        BudgetSummary summary = new BudgetSummary(
-                null,
-                plan,
-                0.0,
-                0.0,
-                "UNDER_LIMIT"
-        );
-
-        return budgetSummaryRepository.save(summary);
+        return budgetSummaryRepository
+                .findFirstByBudgetPlanOrderByGeneratedAtDesc(plan)
+                .orElseGet(() -> {
+                    BudgetSummary summary = new BudgetSummary(
+                            null,
+                            plan,
+                            0.0,
+                            0.0,
+                            "UNDER_LIMIT"
+                    );
+                    return budgetSummaryRepository.save(summary);
+                });
     }
 }
