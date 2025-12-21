@@ -1,7 +1,16 @@
+package com.example.demo.repository;
+
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BudgetSummaryRepository extends JpaRepository<BudgetSummary, Long> {
+import com.example.demo.entity.BudgetPlan;
+import com.example.demo.entity.BudgetSummary;
 
-    Optional<BudgetSummary> findFirstByBudgetPlanOrderByGeneratedAtDesc(BudgetPlan budgetPlan);
+public interface BudgetSummaryRepository
+        extends JpaRepository<BudgetSummary, Long> {
+
+    Optional<BudgetSummary> findFirstByBudgetPlanOrderByGeneratedAtDesc(
+            BudgetPlan budgetPlan
+    );
 }
