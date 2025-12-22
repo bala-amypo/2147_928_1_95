@@ -34,8 +34,6 @@ public class TransactionLogServiceImpl implements TransactionLogService {
 
     @Override
     public TransactionLog addTransaction(Long userId, TransactionLog log) {
-
-        // ✅ Validate request body
         if (log == null) {
             throw new BadRequestException("Transaction body cannot be null");
         }
@@ -47,19 +45,13 @@ public class TransactionLogServiceImpl implements TransactionLogService {
         if (log.getAmount() == null || log.getAmount() <= 0) {
             throw new BadRequestException("Amount must be greater than zero");
         }
-
-        // ✅ Fetch managed User
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new BadRequestException("User with ID " + userId + " not found"));
-
-        // ✅ Fetch managed Category
         Long categoryId = log.getCategory().getId();
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() ->
                         new BadRequestException("Category with ID " + categoryId + " not found"));
-
-        // ✅ Attach managed entities
         log.setUser(user);
         log.setCategory(category);
         if (log.getTransactionDate() == null) {
