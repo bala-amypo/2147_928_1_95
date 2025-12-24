@@ -3,18 +3,34 @@ package com.example.demo.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.Authentication;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Date;
 
 public class JwtTokenProvider {
 
-    private final String secret;
+    private final SecretKey secretKey;
     private final long validityInMs;
 
-    public JwtTokenProvider(String secret, long validityInMs) {
-        this.secret = secret;
+    public JwtTokenProvider(String password, long validityInMs) {
+        this.secretKey = generateKeyFromPassword(password);
         this.validityInMs = validityInMs;
+    }
+
+    private SecretKey generateKeyFromPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] keyBytes = digest.digest(
+                    password.getBytes(StandardCharsets.UTF_8)
+            );
+            return Keys.hmacShaKeyFor(keyBytes);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate JWT key", e);
+        }
     }
 
     public String generateToken(Authentication authentication,
@@ -34,14 +50,15 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
-                    .setSigningKey(secret)
+            Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
@@ -51,8 +68,9 @@ public class JwtTokenProvider {
 
     public Long getUserIdFromToken(String token) {
         return Long.parseLong(
-                Jwts.parser()
-                        .setSigningKey(secret)
+                Jwts.parserBuilder()
+                        .setSigningKey(secretKey)
+                        .build()
                         .parseClaimsJws(token)
                         .getBody()
                         .getSubject()
@@ -60,16 +78,18 @@ public class JwtTokenProvider {
     }
 
     public String getEmailFromToken(String token) {
-        return (String) Jwts.parser()
-                .setSigningKey(secret)
+        return (String) Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("email");
     }
 
     public String getRoleFromToken(String token) {
-        return (String) Jwts.parser()
-                .setSigningKey(secret)
+        return (String) Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .get("role");
