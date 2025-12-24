@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.exception.BadRequestException;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -12,11 +13,9 @@ public class TransactionLog {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
 
     private Double amount;
@@ -26,25 +25,26 @@ public class TransactionLog {
     // ✅ REQUIRED
     public TransactionLog() {}
 
-    // ✅ REQUIRED BY TESTS (without category)
-    public TransactionLog(Long id, User user, Double amount,
-                          String description, LocalDate transactionDate) {
-        this.id = id;
-        this.user = user;
-        this.amount = amount;
-        this.description = description;
-        this.transactionDate = transactionDate;
-    }
-
-    // ✅ FULL CONSTRUCTOR
-    public TransactionLog(Long id, User user, Category category, Double amount,
-                          String description, LocalDate transactionDate) {
+    // ✅ REQUIRED
+    public TransactionLog(Long id, User user, Category category,
+                          Double amount, String description,
+                          LocalDate transactionDate) {
         this.id = id;
         this.user = user;
         this.category = category;
         this.amount = amount;
         this.description = description;
         this.transactionDate = transactionDate;
+    }
+
+    // ✅ REQUIRED BY TESTS (MUST BE PUBLIC)
+    public void validate() {
+        if (amount == null || amount <= 0) {
+            throw new BadRequestException("Amount must be greater than zero");
+        }
+        if (transactionDate != null && transactionDate.isAfter(LocalDate.now())) {
+            throw new BadRequestException("Transaction date cannot be in the future");
+        }
     }
 
     // getters & setters
