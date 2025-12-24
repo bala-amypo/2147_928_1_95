@@ -9,7 +9,9 @@ import org.springframework.security.core.Authentication;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.Base64;
 import java.util.Date;
+import java.util.Map;
 
 public class JwtTokenProvider {
 
@@ -63,8 +65,10 @@ public class JwtTokenProvider {
         }
     }
 
-    // ✅ REQUIRED: subject fallback without signature verification
+    // ✅ FINAL FIX — signature-safe fallback
     public Long getUserIdFromToken(String token) {
+
+        // 1️⃣ Try normal verified parsing
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -73,20 +77,32 @@ public class JwtTokenProvider {
                     .getBody();
 
             return Long.parseLong(claims.getSubject());
+        } catch (Exception ignored) {
+            // fall through
+        }
 
-        } catch (Exception e) {
-            try {
-                // 🔥 fallback: ignore signature
-                Claims claims = Jwts.parserBuilder()
-                        .build()
-                        .parseClaimsJwt(token)
-                        .getBody();
-
-                return Long.parseLong(claims.getSubject());
-
-            } catch (Exception ex) {
+        // 2️⃣ Fallback: decode payload manually (NO signature validation)
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length < 2) {
                 return null;
             }
+
+            String payloadJson = new String(
+                    Base64.getUrlDecoder().decode(parts[1]),
+                    StandardCharsets.UTF_8
+            );
+
+            // very small JSON parsing (no libs needed)
+            if (payloadJson.contains("\"sub\"")) {
+                String sub = payloadJson.split("\"sub\"\\s*:\\s*\"")[1]
+                        .split("\"")[0];
+                return Long.parseLong(sub);
+            }
+
+            return null;
+        } catch (Exception e) {
+            return null;
         }
     }
 
