@@ -86,7 +86,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Test without JUnit -->
+        <!-- Spring Test (JUnit completely excluded) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -97,8 +97,8 @@
                     <artifactId>junit-jupiter</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-launcher</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -115,11 +115,13 @@
                 <version>3.2.5</version>
                 <configuration>
                     <useModulePath>false</useModulePath>
+
                     <providers>
                         <provider>
                             <name>testng</name>
                         </provider>
                     </providers>
+
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
