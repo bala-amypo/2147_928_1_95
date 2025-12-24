@@ -11,8 +11,9 @@ import java.io.IOException;
 public class SimpleHelloServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+public void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException 
+    {
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("text/plain");

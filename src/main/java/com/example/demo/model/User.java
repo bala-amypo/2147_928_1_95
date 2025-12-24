@@ -17,7 +17,7 @@ public class User {
     private String email;
 
     private String password;
-
+    public static final String ROLE_USER = "USER";
     private String role;
 
     @OneToMany(mappedBy = "user")
