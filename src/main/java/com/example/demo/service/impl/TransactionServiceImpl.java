@@ -19,13 +19,13 @@ public class TransactionServiceImpl implements TransactionService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
-                                  UserRepository userRepository,
-                                  CategoryRepository categoryRepository) {
-        this.transactionLogRepository = transactionLogRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-    }
+   public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
+                              UserRepository userRepository) {
+    this.transactionLogRepository = transactionLogRepository;
+    this.userRepository = userRepository;
+    this.categoryRepository = null;
+}
+
 
     @Override
     public TransactionLog addTransaction(Long userId, TransactionLog log) {
