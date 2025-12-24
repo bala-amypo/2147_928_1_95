@@ -6,7 +6,9 @@ import com.example.demo.repository.*;
 import com.example.demo.service.BudgetSummaryService;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BudgetSummaryServiceImpl implements BudgetSummaryService {
 
     private final BudgetSummaryRepository budgetSummaryRepository;

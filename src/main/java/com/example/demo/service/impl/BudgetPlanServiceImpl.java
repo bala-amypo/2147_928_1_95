@@ -6,7 +6,9 @@ import com.example.demo.model.User;
 import com.example.demo.repository.BudgetPlanRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BudgetPlanService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BudgetPlanServiceImpl implements BudgetPlanService {
 
     private final BudgetPlanRepository budgetPlanRepository;
