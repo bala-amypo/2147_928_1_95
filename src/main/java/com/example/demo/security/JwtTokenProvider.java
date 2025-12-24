@@ -1,7 +1,10 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.Authentication;
+
 import java.util.Date;
 
 public class JwtTokenProvider {
@@ -52,7 +55,8 @@ public class JwtTokenProvider {
                         .setSigningKey(secret)
                         .parseClaimsJws(token)
                         .getBody()
-                        .getSubject());
+                        .getSubject()
+        );
     }
 
     public String getEmailFromToken(String token) {
