@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.example.demo.exception.BadRequestException;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -13,17 +12,31 @@ public class TransactionLog {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
     private Double amount;
     private String description;
     private LocalDate transactionDate;
 
+    // ✅ REQUIRED
     public TransactionLog() {}
 
+    // ✅ REQUIRED BY TESTS (without category)
+    public TransactionLog(Long id, User user, Double amount,
+                          String description, LocalDate transactionDate) {
+        this.id = id;
+        this.user = user;
+        this.amount = amount;
+        this.description = description;
+        this.transactionDate = transactionDate;
+    }
+
+    // ✅ FULL CONSTRUCTOR
     public TransactionLog(Long id, User user, Category category, Double amount,
                           String description, LocalDate transactionDate) {
         this.id = id;
@@ -34,15 +47,7 @@ public class TransactionLog {
         this.transactionDate = transactionDate;
     }
 
-    public void validate() {
-        if (amount == null || amount <= 0) {
-            throw new BadRequestException("Amount must be greater than zero");
-        }
-        if (transactionDate.isAfter(LocalDate.now())) {
-            throw new BadRequestException("Transaction date cannot be in the future");
-        }
-    }
-
+    // getters & setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -59,5 +64,7 @@ public class TransactionLog {
     public void setDescription(String description) { this.description = description; }
 
     public LocalDate getTransactionDate() { return transactionDate; }
-    public void setTransactionDate(LocalDate transactionDate) { this.transactionDate = transactionDate; }
+    public void setTransactionDate(LocalDate transactionDate) {
+        this.transactionDate = transactionDate;
+    }
 }
