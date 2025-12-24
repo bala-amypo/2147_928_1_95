@@ -6,10 +6,11 @@ public class RegisterRequest {
     private String email;
     private String password;
 
-    // ✅ REQUIRED
-    public RegisterRequest() {}
+    // REQUIRED by tests
+    public RegisterRequest() {
+    }
 
-    // ✅ REQUIRED
+    // REQUIRED by tests
     public RegisterRequest(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -31,7 +32,7 @@ public class RegisterRequest {
     public void setEmail(String email) {
         this.email = email;
     }
- 
+
     public String getPassword() {
         return password;
     }

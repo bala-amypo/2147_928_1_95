@@ -1,15 +1,27 @@
 package com.example.demo.dto;
 
-public class LoginRequest {
+public class RegisterRequest {
 
+    private String name;
     private String email;
     private String password;
 
-    public LoginRequest() {}
+    // ✅ REQUIRED
+    public RegisterRequest() {}
 
-    public LoginRequest(String email, String password) {
+    // ✅ REQUIRED
+    public RegisterRequest(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
