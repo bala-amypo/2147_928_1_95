@@ -9,6 +9,12 @@ public class AuthResponse {
 
     public AuthResponse() {}
 
+    // ✅ REQUIRED BY TESTS
+    public AuthResponse(String token) {
+        this.token = token;
+    }
+
+    // Optional full constructor (safe to keep)
     public AuthResponse(String token, Long userId, String email, String role) {
         this.token = token;
         this.userId = userId;
@@ -16,19 +22,8 @@ public class AuthResponse {
         this.role = role;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getRole() {
-        return role;
-    }
+    public String getToken() { return token; }
+    public Long getUserId() { return userId; }
+    public String getEmail() { return email; }
+    public String getRole() { return role; }
 }
