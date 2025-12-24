@@ -16,13 +16,9 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-
-                // ✅ EXISTING CODE (UNCHANGED)
                 .servers(List.of(
                         new Server().url("https://9161.408procr.amypo.ai/")
                 ))
-
-                // ✅ ADDED CODE (to enable Authorize button)
                 .components(
                         new Components().addSecuritySchemes(
                                 "bearerAuth",
