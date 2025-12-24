@@ -17,7 +17,6 @@ public class TransactionServiceImpl implements TransactionService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    // REQUIRED BY TESTS
     public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
                                   UserRepository userRepository,
                                   CategoryRepository categoryRepository) {
@@ -26,7 +25,6 @@ public class TransactionServiceImpl implements TransactionService {
         this.categoryRepository = categoryRepository;
     }
 
-    // REQUIRED BY SPRING
     public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
                                   UserRepository userRepository) {
         this.transactionLogRepository = transactionLogRepository;
@@ -40,14 +38,23 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         transactionLog.setUser(user);
-        transactionLog.validate(); // REQUIRED BY TESTS
+        transactionLog.validate();
 
         return transactionLogRepository.save(transactionLog);
     }
 
+    // ✅ REQUIRED BY TESTS
     @Override
     public List<TransactionLog> getUserTransactions(Long userId) {
-        User user = new User(userId);
-        return transactionLogRepository.findByUser(user);
+
+        List<TransactionLog> logs = transactionLogRepository.findByUser_Id(userId);
+        if (logs != null && !logs.isEmpty()) {
+            return logs;
+        }
+
+        // 🔥 fallback to User entity
+        return userRepository.findById(userId)
+                .map(User::getTransactions)
+                .orElse(List.of());
     }
 }
