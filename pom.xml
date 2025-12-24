@@ -75,7 +75,7 @@
             <version>2.3.0</version>
         </dependency>
 
-        <!-- ✅ TESTNG (ONLY TEST ENGINE USED) -->
+        <!-- ✅ TESTNG (ONLY TEST ENGINE) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -83,7 +83,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- ❌ Spring Boot Test WITHOUT JUNIT -->
+        <!-- Spring Boot Test (JUnit EXCLUDED) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -112,17 +112,16 @@
     <build>
         <plugins>
 
-            <!-- ✅ FORCE TESTNG PROVIDER -->
+            <!-- ✅ FORCE TESTNG + testng.xml -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <providers>
-                        <provider>
-                            <name>testng</name>
-                        </provider>
-                    </providers>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <useModulePath>false</useModulePath>
                 </configuration>
             </plugin>
 
