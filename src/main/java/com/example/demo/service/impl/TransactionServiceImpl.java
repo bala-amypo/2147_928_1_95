@@ -19,17 +19,17 @@ public class TransactionServiceImpl implements TransactionService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-   public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
-                              UserRepository userRepository) {
-    this.transactionLogRepository = transactionLogRepository;
-    this.userRepository = userRepository;
-    this.categoryRepository = null;
-}
-
+    // ✅ REQUIRED BY PLATFORM TESTS
+    public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
+                                  UserRepository userRepository,
+                                  CategoryRepository categoryRepository) {
+        this.transactionLogRepository = transactionLogRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public TransactionLog addTransaction(Long userId, TransactionLog log) {
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BadRequestException("User not found"));
 
