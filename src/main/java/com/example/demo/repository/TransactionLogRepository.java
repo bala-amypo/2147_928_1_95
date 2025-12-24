@@ -1,22 +1,10 @@
 package com.example.demo.repository;
 
-import java.time.LocalDate;
-import java.util.List;
-
+import com.example.demo.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import com.example.demo.entity.TransactionLog;
-import com.example.demo.entity.User;
-
-@Repository
+import java.time.LocalDate;
+import java.util.*;
 public interface TransactionLogRepository extends JpaRepository<TransactionLog, Long> {
     List<TransactionLog> findByUser(User user);
-    List<TransactionLog> findByUserAndTransactionDateBetween(
-            User user,
-            LocalDate start,
-            LocalDate end
-    );
-
-    List<TransactionLog> findByUserOrderByTransactionDateDesc(User user);
+    List<TransactionLog> findByUserAndTransactionDateBetween(User user, LocalDate start, LocalDate end);
 }
