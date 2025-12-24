@@ -22,10 +22,10 @@ public class TransactionLog {
     private String description;
     private LocalDate transactionDate;
 
-    // ✅ REQUIRED
+    
     public TransactionLog() {}
 
-    // ✅ REQUIRED
+
     public TransactionLog(Long id, User user, Category category,
                           Double amount, String description,
                           LocalDate transactionDate) {
@@ -37,7 +37,7 @@ public class TransactionLog {
         this.transactionDate = transactionDate;
     }
 
-    // ✅ REQUIRED BY TESTS (MUST BE PUBLIC)
+    
     public void validate() {
         if (amount == null || amount <= 0) {
             throw new BadRequestException("Amount must be greater than zero");

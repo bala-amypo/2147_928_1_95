@@ -10,10 +10,8 @@ import java.util.List;
 public interface TransactionLogRepository
         extends JpaRepository<TransactionLog, Long> {
 
-    // ✅ EXISTING (DO NOT REMOVE)
     List<TransactionLog> findByUser(User user);
 
-    // ✅ EXISTING (DO NOT REMOVE)
     List<TransactionLog> findByUserAndTransactionDateBetween(
             User user,
             LocalDate start,

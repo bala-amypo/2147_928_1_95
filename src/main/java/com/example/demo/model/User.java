@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 @Table(name = "users")
 public class User {
 
-    // ✅ REQUIRED BY TESTS
     public static final String ROLE_USER = "USER";
     public static final String ROLE_ADMIN = "ADMIN";
 
@@ -19,15 +18,12 @@ public class User {
     private String password;
     private String role;
 
-    // ✅ REQUIRED
     public User() {}
 
-    // ✅ REQUIRED
     public User(Long id) {
         this.id = id;
     }
 
-    // ✅ REQUIRED FOR AuthController
     public User(Long id, String name, String email, String password, String role) {
         this.id = id;
         this.name = name;
