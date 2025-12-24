@@ -1,14 +1,11 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.model.Category;
+import com.example.demo.repository.CategoryRepository;
+import com.example.demo.service.CategoryService;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
-import com.example.demo.entity.Category;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.repository.CategoryRepository;
-
-@Service
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -18,10 +15,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category createCategory(Category category) {
+    public Category addCategory(Category category) {
         if (categoryRepository.existsByName(category.getName())) {
-            throw new BadRequestException("Category with name '" + category.getName() + "' already exists");
+            throw new BadRequestException("Category already exists");
         }
+
+        category.validateType();
         return categoryRepository.save(category);
     }
 
