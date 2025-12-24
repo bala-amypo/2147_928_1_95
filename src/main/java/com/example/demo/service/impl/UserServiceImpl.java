@@ -13,6 +13,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // ✅ REQUIRED CONSTRUCTOR (TESTS USE THIS)
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -21,14 +22,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
+
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
 
+        // ✅ PASSWORD MUST BE ENCODED
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        // ✅ MUST USE CONSTANT (NOT STRING)
         if (user.getRole() == null) {
-            user.setRole("USER");
+            user.setRole(User.ROLE_USER);
         }
 
         return userRepository.save(user);
