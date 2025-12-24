@@ -21,6 +21,7 @@
         <java.version>17</java.version>
     </properties>
 
+    <!-- ================= DEPENDENCIES ================= -->
     <dependencies>
 
         <!-- Spring Web -->
@@ -74,7 +75,7 @@
             <version>2.3.0</version>
         </dependency>
 
-        <!-- TestNG -->
+        <!-- ✅ TESTNG (ONLY TEST ENGINE USED) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -82,11 +83,21 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring Boot Test -->
+        <!-- ❌ Spring Boot Test WITHOUT JUNIT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-launcher</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Validation -->
@@ -97,20 +108,25 @@
 
     </dependencies>
 
+    <!-- ================= BUILD ================= -->
     <build>
         <plugins>
 
-            <!-- FORCE TESTNG -->
+            <!-- ✅ FORCE TESTNG PROVIDER -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
-                    <testNGArtifactName>org.testng:testng</testNGArtifactName>
+                    <providers>
+                        <provider>
+                            <name>testng</name>
+                        </provider>
+                    </providers>
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot Plugin -->
+            <!-- Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
