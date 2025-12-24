@@ -11,9 +11,8 @@ import java.io.IOException;
 public class SimpleHelloServlet extends HttpServlet {
 
     @Override
-public void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException 
-    {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("text/plain");
@@ -21,9 +20,10 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // Requirement: POST must return 200 or 405 (no exception)
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
