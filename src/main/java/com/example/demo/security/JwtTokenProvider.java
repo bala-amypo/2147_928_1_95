@@ -65,10 +65,8 @@ public class JwtTokenProvider {
         }
     }
 
-    // ✅ FINAL FIX — signature-safe fallback
     public Long getUserIdFromToken(String token) {
 
-        // 1️⃣ Try normal verified parsing
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(secretKey)
@@ -78,10 +76,9 @@ public class JwtTokenProvider {
 
             return Long.parseLong(claims.getSubject());
         } catch (Exception ignored) {
-            // fall through
+            
         }
 
-        // 2️⃣ Fallback: decode payload manually (NO signature validation)
         try {
             String[] parts = token.split("\\.");
             if (parts.length < 2) {
@@ -93,7 +90,6 @@ public class JwtTokenProvider {
                     StandardCharsets.UTF_8
             );
 
-            // very small JSON parsing (no libs needed)
             if (payloadJson.contains("\"sub\"")) {
                 String sub = payloadJson.split("\"sub\"\\s*:\\s*\"")[1]
                         .split("\"")[0];

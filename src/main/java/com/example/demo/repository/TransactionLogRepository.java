@@ -18,6 +18,5 @@ public interface TransactionLogRepository
             LocalDate end
     );
 
-    // ✅ REQUIRED BY SERVICE + TESTS
     List<TransactionLog> findByUser_Id(Long userId);
 }
