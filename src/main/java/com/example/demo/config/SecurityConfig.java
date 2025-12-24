@@ -40,7 +40,6 @@ public class SecurityConfig {
             throws Exception {
 
         http
-            // ✅ FIXED CSRF LINE (Spring Security 6 compliant)
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
