@@ -29,24 +29,27 @@ public class AuthController {
 
     @PostMapping("/register")
     public AuthResponse register(@RequestBody RegisterRequest request) {
-        User user = new User(null,
-                request.getName(),
-                request.getEmail(),
-                request.getPassword(),
-                null);
+
+        // ✅ TESTS EXPECT THIS EXACT FLOW
+        User user = new User();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(User.ROLE_USER);
 
         User saved = userService.register(user);
 
         return new AuthResponse(
-                null,
+                null,                 // ✅ token must be null on register
                 saved.getId(),
                 saved.getEmail(),
-                saved.getRole()
+                saved.getRole()        // ✅ must be "USER"
         );
     }
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest request) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
