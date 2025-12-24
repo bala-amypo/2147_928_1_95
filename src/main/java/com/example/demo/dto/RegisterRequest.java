@@ -6,13 +6,16 @@ public class RegisterRequest {
     private String email;
     private String password;
 
-    public RegisterRequest() {}
-    
+    // REQUIRED no-args constructor
+    public RegisterRequest() {
+    }
+
+    // ✅ REQUIRED all-args constructor (TESTS NEED THIS)
     public RegisterRequest(String name, String email, String password) {
-    this.name = name;
-    this.email = email;
-    this.password = password;
-}
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 
     public String getName() {
         return name;
