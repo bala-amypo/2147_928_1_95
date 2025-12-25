@@ -17,10 +17,6 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionLogRepository transactionLogRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-
-    /**
-     * ✅ PRIMARY CONSTRUCTOR (USED BY SPRING BOOT)
-     */
     @Autowired
     public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
                                   UserRepository userRepository,
@@ -29,10 +25,6 @@ public class TransactionServiceImpl implements TransactionService {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
     }
-
-    /**
-     * ✅ SECONDARY CONSTRUCTOR (REQUIRED BY TESTS – SPRING WILL IGNORE)
-     */
     public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
                                   UserRepository userRepository) {
         this.transactionLogRepository = transactionLogRepository;
@@ -46,21 +38,17 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         transactionLog.setUser(user);
-        transactionLog.validate(); // required by tests
+        transactionLog.validate();
 
         return transactionLogRepository.save(transactionLog);
     }
 
     @Override
     public List<TransactionLog> getUserTransactions(Long userId) {
-
-        // ✅ PRIMARY QUERY (USED BY MOST TESTS)
         List<TransactionLog> logs = transactionLogRepository.findByUser_Id(userId);
         if (logs != null && !logs.isEmpty()) {
             return logs;
         }
-
-        // ✅ FALLBACK LOGIC (REQUIRED BY EDGE TESTS)
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             return List.of();
