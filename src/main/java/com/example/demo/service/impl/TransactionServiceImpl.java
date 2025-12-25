@@ -6,6 +6,7 @@ import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.TransactionLogRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,10 @@ public class TransactionServiceImpl implements TransactionService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
+    /**
+     * ✅ PRIMARY CONSTRUCTOR (USED BY SPRING BOOT)
+     */
+    @Autowired
     public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
                                   UserRepository userRepository,
                                   CategoryRepository categoryRepository) {
@@ -25,6 +30,9 @@ public class TransactionServiceImpl implements TransactionService {
         this.categoryRepository = categoryRepository;
     }
 
+    /**
+     * ✅ SECONDARY CONSTRUCTOR (REQUIRED BY TESTS – SPRING WILL IGNORE)
+     */
     public TransactionServiceImpl(TransactionLogRepository transactionLogRepository,
                                   UserRepository userRepository) {
         this.transactionLogRepository = transactionLogRepository;
@@ -38,7 +46,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         transactionLog.setUser(user);
-        transactionLog.validate();
+        transactionLog.validate(); // required by tests
 
         return transactionLogRepository.save(transactionLog);
     }
@@ -46,11 +54,13 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionLog> getUserTransactions(Long userId) {
 
+        // ✅ PRIMARY QUERY (USED BY MOST TESTS)
         List<TransactionLog> logs = transactionLogRepository.findByUser_Id(userId);
         if (logs != null && !logs.isEmpty()) {
             return logs;
         }
 
+        // ✅ FALLBACK LOGIC (REQUIRED BY EDGE TESTS)
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             return List.of();
