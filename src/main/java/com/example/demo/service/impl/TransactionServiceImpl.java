@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         transactionLog.setUser(user);
-        transactionLog.validate();
+        transactionLog.validate(); 
 
         return transactionLogRepository.save(transactionLog);
     }
